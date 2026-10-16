@@ -1,0 +1,1832 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>AquaSafe AI — Test History</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            font-family: Arial, Helvetica, sans-serif;
+
+            color: #eaf8ff;
+
+            background:
+                radial-gradient(
+                    circle at 50% 0%,
+                    rgba(0, 174, 255, 0.18),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 0% 100%,
+                    rgba(0, 100, 255, 0.12),
+                    transparent 35%
+                ),
+                #020814;
+
+            overflow-x: hidden;
+        }
+
+
+        /* ==========================================
+           MOVING GRID
+        ========================================== */
+
+        body::before {
+
+            content: "";
+
+            position: fixed;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            background-image:
+                linear-gradient(
+                    rgba(0, 174, 255, 0.035) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(0, 174, 255, 0.035) 1px,
+                    transparent 1px
+                );
+
+            background-size: 45px 45px;
+
+            animation: gridMove 18s linear infinite;
+
+            z-index: 0;
+        }
+
+
+        @keyframes gridMove {
+
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(45px);
+            }
+        }
+
+
+        /* ==========================================
+           HEADER
+        ========================================== */
+
+        header {
+
+            width: 100%;
+
+            padding: 22px 5%;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            border-bottom:
+                1px solid
+                rgba(0, 200, 255, 0.18);
+
+            background:
+                rgba(2, 12, 25, 0.65);
+
+            backdrop-filter: blur(18px);
+
+            position: relative;
+
+            z-index: 5;
+
+            flex-wrap: wrap;
+        }
+
+
+        .logo {
+
+            font-size: 23px;
+
+            font-weight: bold;
+
+            letter-spacing: 4px;
+
+            color: #66ddff;
+
+            text-shadow:
+                0 0 15px
+                rgba(0, 200, 255, 0.7);
+        }
+
+
+        /* ==========================================
+           NAVIGATION
+        ========================================== */
+
+        .main-nav {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin-left: auto;
+
+            margin-right: 35px;
+        }
+
+
+        .main-nav a {
+
+            padding: 9px 13px;
+
+            color: #8db8c9;
+
+            text-decoration: none;
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+            letter-spacing: 1.5px;
+
+            border:
+                1px solid
+                transparent;
+
+            border-radius: 8px;
+
+            transition: 0.3s ease;
+        }
+
+
+        .main-nav a:hover,
+        .main-nav a.active {
+
+            color: #ffffff;
+
+            border-color:
+                rgba(0, 200, 255, 0.3);
+
+            background:
+                rgba(0, 180, 255, 0.08);
+
+            box-shadow:
+                0 0 18px
+                rgba(0, 180, 255, 0.12);
+        }
+
+
+        .main-nav a.active {
+
+            text-shadow:
+                0 0 12px
+                rgba(0, 210, 255, 0.7);
+        }
+
+
+        /* ==========================================
+           SYSTEM STATUS
+        ========================================== */
+
+        .system-status {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            font-size: 11px;
+
+            color: #76e8ff;
+
+            letter-spacing: 1.5px;
+        }
+
+
+        .status-dot {
+
+            width: 8px;
+
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: #00e5ff;
+
+            box-shadow:
+                0 0 14px
+                #00e5ff;
+
+            animation: pulse 1.6s infinite;
+        }
+
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.45;
+                transform: scale(1.35);
+            }
+        }
+
+
+        /* ==========================================
+           MAIN
+        ========================================== */
+
+        .container {
+
+            width: 90%;
+
+            max-width: 1200px;
+
+            margin: 45px auto 90px;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        /* ==========================================
+           PAGE TITLE
+        ========================================== */
+
+        .page-title {
+
+            text-align: center;
+
+            margin-bottom: 40px;
+        }
+
+
+        .page-title .tag {
+
+            color: #53dfff;
+
+            font-size: 11px;
+
+            letter-spacing: 5px;
+
+            margin-bottom: 16px;
+        }
+
+
+        .page-title h1 {
+
+            font-size:
+                clamp(34px, 6vw, 60px);
+
+            letter-spacing: 5px;
+
+            color: #dffaff;
+
+            text-shadow:
+                0 0 15px
+                rgba(0, 200, 255, 0.6),
+                0 0 35px
+                rgba(0, 100, 255, 0.25);
+        }
+
+
+        .page-title p {
+
+            margin-top: 14px;
+
+            color: #83a9bb;
+
+            font-size: 12px;
+
+            letter-spacing: 2px;
+        }
+
+
+        /* ==========================================
+           HISTORY TOOLBAR
+        ========================================== */
+
+        .toolbar {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 20px;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .history-count {
+
+            color: #6f9aaa;
+
+            font-size: 11px;
+
+            letter-spacing: 2px;
+        }
+
+
+        .refresh-btn {
+
+            padding: 11px 18px;
+
+            border:
+                1px solid
+                rgba(70, 210, 255, 0.25);
+
+            border-radius: 9px;
+
+            background:
+                rgba(0, 160, 230, 0.08);
+
+            color: #8de7ff;
+
+            cursor: pointer;
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+            letter-spacing: 1.5px;
+
+            transition: 0.3s ease;
+        }
+
+
+        .refresh-btn:hover {
+
+            transform: translateY(-2px);
+
+            border-color:
+                rgba(70, 220, 255, 0.55);
+
+            background:
+                rgba(0, 180, 255, 0.14);
+
+            box-shadow:
+                0 0 20px
+                rgba(0, 190, 255, 0.15);
+        }
+
+
+        /* ==========================================
+           HISTORY GRID
+        ========================================== */
+
+        #historyContainer {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 18px;
+        }
+
+
+        /* ==========================================
+           HISTORY CARD
+        ========================================== */
+
+        .history-card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            padding: 24px;
+
+            border:
+                1px solid
+                rgba(70, 211, 255, 0.22);
+
+            border-radius: 18px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(9, 36, 58, 0.78),
+                    rgba(3, 15, 30, 0.72)
+                );
+
+            box-shadow:
+                0 15px 50px
+                rgba(0, 0, 0, 0.3),
+
+                inset 0 0 30px
+                rgba(0, 170, 255, 0.025);
+
+            backdrop-filter: blur(18px);
+
+            animation:
+                cardAppear 0.5s ease;
+        }
+
+
+        .history-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+
+            left: 10%;
+
+            width: 80%;
+
+            height: 1px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    #48dfff,
+                    transparent
+                );
+
+            opacity: 0.7;
+        }
+
+
+        .history-card:hover {
+
+            transform: translateY(-4px);
+
+            border-color:
+                rgba(70, 220, 255, 0.42);
+
+            box-shadow:
+                0 20px 60px
+                rgba(0, 150, 255, 0.12);
+        }
+
+
+        @keyframes cardAppear {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(15px);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+
+        /* ==========================================
+           CARD TOP
+        ========================================== */
+
+        .card-top {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .test-number {
+
+            color: #5c94a8;
+
+            font-size: 9px;
+
+            letter-spacing: 1.5px;
+        }
+
+
+        .risk-pill {
+
+            padding: 7px 12px;
+
+            border-radius: 20px;
+
+            font-size: 9px;
+
+            font-weight: bold;
+
+            letter-spacing: 1px;
+
+            border:
+                1px solid
+                rgba(0, 210, 255, 0.3);
+
+            color: #62e4ff;
+
+            background:
+                rgba(0, 170, 255, 0.08);
+        }
+
+
+        .risk-red {
+
+            color: #ff9a86;
+
+            border-color:
+                rgba(255, 90, 80, 0.35);
+
+            background:
+                rgba(255, 60, 50, 0.08);
+        }
+
+
+        .risk-yellow {
+
+            color: #ffe18a;
+
+            border-color:
+                rgba(255, 210, 70, 0.35);
+
+            background:
+                rgba(255, 190, 50, 0.08);
+        }
+
+
+        .risk-green {
+
+            color: #7affc5;
+
+            border-color:
+                rgba(70, 255, 180, 0.35);
+
+            background:
+                rgba(50, 220, 150, 0.08);
+        }
+
+
+        /* ==========================================
+           SCORE
+        ========================================== */
+
+        .score-row {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .mini-score {
+
+            width: 78px;
+
+            height: 78px;
+
+            min-width: 78px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            position: relative;
+
+            background:
+                conic-gradient(
+                    #00d9ff 0deg,
+                    #00d9ff var(--score),
+                    rgba(40, 90, 115, 0.14)
+                    var(--score) 360deg
+                );
+
+            box-shadow:
+                0 0 20px
+                rgba(0, 200, 255, 0.1);
+        }
+
+
+        .mini-score::before {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 7px;
+
+            border-radius: 50%;
+
+            background: #031421;
+        }
+
+
+        .mini-score span {
+
+            position: relative;
+
+            z-index: 2;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            color: #e8fbff;
+        }
+
+
+        .score-info h2 {
+
+            font-size: 22px;
+
+            letter-spacing: 1px;
+
+            color: #e8fbff;
+        }
+
+
+        .score-info p {
+
+            margin-top: 6px;
+
+            color: #7799a8;
+
+            font-size: 10px;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* ==========================================
+           CARD DETAILS
+        ========================================== */
+
+        .details {
+
+            padding-top: 17px;
+
+            border-top:
+                1px solid
+                rgba(100, 200, 255, 0.1);
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 13px;
+        }
+
+
+        .detail-label {
+
+            display: block;
+
+            color: #597c8d;
+
+            font-size: 8px;
+
+            letter-spacing: 1.5px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .detail-value {
+
+            color: #ccefff;
+
+            font-size: 11px;
+        }
+
+
+        /* ==========================================
+           ACTIONS
+        ========================================== */
+
+        .card-actions {
+
+            display: flex;
+
+            gap: 9px;
+
+            margin-top: 20px;
+        }
+
+
+        .view-btn,
+        .delete-btn {
+
+            flex: 1;
+
+            padding: 11px;
+
+            border-radius: 9px;
+
+            cursor: pointer;
+
+            font-size: 9px;
+
+            font-weight: bold;
+
+            letter-spacing: 1.2px;
+
+            transition: 0.25s ease;
+        }
+
+
+        .view-btn {
+
+            color: #00131c;
+
+            background: #55dcff;
+
+            border: none;
+        }
+
+
+        .view-btn:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 0 22px
+                rgba(0, 210, 255, 0.4);
+        }
+
+
+        .delete-btn {
+
+            color: #ffaaa0;
+
+            background:
+                rgba(255, 70, 60, 0.06);
+
+            border:
+                1px solid
+                rgba(255, 80, 70, 0.22);
+        }
+
+
+        .delete-btn:hover {
+
+            transform: translateY(-2px);
+
+            background:
+                rgba(255, 70, 60, 0.12);
+
+            border-color:
+                rgba(255, 90, 80, 0.45);
+        }
+
+
+        /* ==========================================
+           EMPTY STATE
+        ========================================== */
+
+        .empty-state {
+
+            grid-column: 1 / -1;
+
+            text-align: center;
+
+            padding: 70px 30px;
+
+            border:
+                1px solid
+                rgba(70, 211, 255, 0.18);
+
+            border-radius: 20px;
+
+            background:
+                rgba(5, 25, 42, 0.55);
+        }
+
+
+        .empty-icon {
+
+            font-size: 45px;
+
+            margin-bottom: 18px;
+
+            filter:
+                drop-shadow(
+                    0 0 15px
+                    rgba(0, 200, 255, 0.5)
+                );
+        }
+
+
+        .empty-state h2 {
+
+            color: #cdefff;
+
+            font-size: 22px;
+
+            letter-spacing: 2px;
+        }
+
+
+        .empty-state p {
+
+            margin-top: 10px;
+
+            color: #6e8d9b;
+
+            font-size: 11px;
+
+            letter-spacing: 1px;
+        }
+
+
+        .analyze-link {
+
+            display: inline-block;
+
+            margin-top: 22px;
+
+            padding: 12px 20px;
+
+            border:
+                1px solid
+                #28d8ff;
+
+            border-radius: 9px;
+
+            color: #76e7ff;
+
+            text-decoration: none;
+
+            font-size: 9px;
+
+            font-weight: bold;
+
+            letter-spacing: 1.5px;
+        }
+
+
+        .analyze-link:hover {
+
+            background:
+                rgba(0, 190, 255, 0.12);
+
+            box-shadow:
+                0 0 20px
+                rgba(0, 190, 255, 0.2);
+        }
+
+
+        /* ==========================================
+           LOADING
+        ========================================== */
+
+        .loading {
+
+            grid-column: 1 / -1;
+
+            text-align: center;
+
+            padding: 60px;
+
+            color: #67ddff;
+
+            font-size: 11px;
+
+            letter-spacing: 2px;
+        }
+
+
+        .loader {
+
+            width: 28px;
+
+            height: 28px;
+
+            margin: 0 auto 15px;
+
+            border:
+                2px solid
+                rgba(70, 210, 255, 0.15);
+
+            border-top-color: #38dfff;
+
+            border-radius: 50%;
+
+            animation:
+                spin 0.8s linear infinite;
+        }
+
+
+        @keyframes spin {
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+
+        /* ==========================================
+           ERROR
+        ========================================== */
+
+        .error-state {
+
+            grid-column: 1 / -1;
+
+            padding: 25px;
+
+            text-align: center;
+
+            color: #ffaaa0;
+
+            border:
+                1px solid
+                rgba(255, 70, 70, 0.2);
+
+            border-radius: 15px;
+
+            background:
+                rgba(255, 50, 50, 0.05);
+
+            font-size: 11px;
+        }
+
+
+        /* ==========================================
+           RESPONSIVE
+        ========================================== */
+
+        @media (max-width: 850px) {
+
+            #historyContainer {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .main-nav {
+
+                order: 3;
+
+                width: 100%;
+
+                justify-content: center;
+
+                margin: 12px 0 0;
+            }
+
+
+            .system-status {
+
+                font-size: 9px;
+            }
+        }
+
+
+        @media (max-width: 550px) {
+
+            header {
+
+                padding: 18px 20px;
+            }
+
+
+            .logo {
+
+                font-size: 18px;
+            }
+
+
+            .system-status {
+
+                display: none;
+            }
+
+
+            .main-nav {
+
+                gap: 3px;
+            }
+
+
+            .main-nav a {
+
+                padding: 8px 7px;
+
+                font-size: 8px;
+
+                letter-spacing: 1px;
+            }
+
+
+            .container {
+
+                width: 92%;
+
+                margin-top: 30px;
+            }
+
+
+            .history-card {
+
+                padding: 20px;
+            }
+
+
+            .card-actions {
+
+                flex-direction: column;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- HEADER -->
+
+    <header>
+
+        <div class="logo">
+            AQUASAFE AI
+        </div>
+
+
+        <nav
+            class="main-nav"
+            aria-label="Main navigation"
+        >
+
+            <a href="/">
+                HOME
+            </a>
+
+            <a href="/analyze">
+                ANALYZE
+            </a>
+
+            <a
+                href="/history"
+                class="active"
+            >
+                HISTORY
+            </a>
+
+            <a href="/about">
+                ABOUT
+            </a>
+
+        </nav>
+
+
+        <div class="system-status">
+
+            <span class="status-dot"></span>
+
+            SYSTEM ONLINE
+
+        </div>
+
+    </header>
+
+
+    <!-- MAIN -->
+
+    <main class="container">
+
+
+        <section class="page-title">
+
+            <div class="tag">
+                AQUASAFE DATABASE
+            </div>
+
+            <h1>
+                TEST HISTORY
+            </h1>
+
+            <p>
+                VIEW AND MANAGE YOUR PREVIOUS WATER ANALYSES
+            </p>
+
+        </section>
+
+
+        <!-- TOOLBAR -->
+
+        <div class="toolbar">
+
+            <div
+                class="history-count"
+                id="historyCount"
+            >
+                LOADING TEST RECORDS...
+            </div>
+
+
+            <button
+                class="refresh-btn"
+                onclick="loadHistory()"
+            >
+                ↻ REFRESH HISTORY
+            </button>
+
+        </div>
+
+
+        <!-- HISTORY -->
+
+        <section id="historyContainer">
+
+            <div class="loading">
+
+                <div class="loader"></div>
+
+                LOADING WATER TEST HISTORY...
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <script>
+
+        // =====================================================
+        // LOAD HISTORY
+        // =====================================================
+
+        async function loadHistory() {
+
+            const container =
+                document.getElementById(
+                    "historyContainer"
+                );
+
+            const countElement =
+                document.getElementById(
+                    "historyCount"
+                );
+
+
+            container.innerHTML = `
+
+                <div class="loading">
+
+                    <div class="loader"></div>
+
+                    LOADING WATER TEST HISTORY...
+
+                </div>
+
+            `;
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/history"
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok || !data.success) {
+
+                    throw new Error(
+                        data.error ||
+                        "Unable to load history."
+                    );
+
+                }
+
+
+                countElement.textContent =
+                    `${data.count} SAVED WATER TEST${data.count === 1 ? "" : "S"}`;
+
+
+                if (
+                    !data.history ||
+                    data.history.length === 0
+                ) {
+
+                    container.innerHTML = `
+
+                        <div class="empty-state">
+
+                            <div class="empty-icon">
+                                💧
+                            </div>
+
+                            <h2>
+                                NO TESTS YET
+                            </h2>
+
+                            <p>
+                                Your completed water analyses
+                                will appear here.
+                            </p>
+
+                            <a
+                                href="/analyze"
+                                class="analyze-link"
+                            >
+                                START WATER ANALYSIS
+                            </a>
+
+                        </div>
+
+                    `;
+
+                    return;
+                }
+
+
+                container.innerHTML = "";
+
+
+                data.history.forEach(
+                    (test, index) => {
+
+                        container.appendChild(
+                            createHistoryCard(
+                                test,
+                                index
+                            )
+                        );
+
+                    }
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "History error:",
+                    error
+                );
+
+
+                countElement.textContent =
+                    "HISTORY LOAD ERROR";
+
+
+                container.innerHTML = `
+
+                    <div class="error-state">
+
+                        ⚠ ${escapeHtml(
+                            error.message
+                        )}
+
+                        <br><br>
+
+                        Check that the AquaSafe
+                        backend is running.
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+        // =====================================================
+        // CREATE HISTORY CARD
+        // =====================================================
+
+        function createHistoryCard(
+            test,
+            index
+        ) {
+
+            const card =
+                document.createElement(
+                    "article"
+                );
+
+
+            card.className =
+                "history-card";
+
+
+            const score =
+                Number(
+                    test.safety_score || 0
+                );
+
+
+            const scoreDegrees =
+                Math.max(
+                    0,
+                    Math.min(
+                        360,
+                        score * 3.6
+                    )
+                );
+
+
+            const riskLevel =
+                test.risk &&
+                test.risk.level
+                    ? test.risk.level
+                    : "UNKNOWN";
+
+
+            let riskClass = "";
+
+
+            if (riskLevel === "RED") {
+
+                riskClass = "risk-red";
+
+            } else if (
+                riskLevel === "YELLOW"
+            ) {
+
+                riskClass = "risk-yellow";
+
+            } else if (
+                riskLevel === "GREEN"
+            ) {
+
+                riskClass = "risk-green";
+
+            }
+
+
+            const dateText =
+                formatDate(
+                    test.created_at
+                );
+
+
+            card.innerHTML = `
+
+                <div class="card-top">
+
+                    <span class="test-number">
+
+                        TEST #${index + 1}
+
+                    </span>
+
+
+                    <span
+                        class="risk-pill ${riskClass}"
+                    >
+
+                        ${escapeHtml(
+                            test.risk?.title ||
+                            riskLevel
+                        )}
+
+                    </span>
+
+                </div>
+
+
+                <div class="score-row">
+
+                    <div
+                        class="mini-score"
+                        style="--score: ${scoreDegrees}deg;"
+                    >
+
+                        <span>
+                            ${score}
+                        </span>
+
+                    </div>
+
+
+                    <div class="score-info">
+
+                        <h2>
+                            ${score}/100
+                        </h2>
+
+                        <p>
+                            SAFETY SCORE
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="details">
+
+                    <div>
+
+                        <span class="detail-label">
+                            DATE & TIME
+                        </span>
+
+                        <span class="detail-value">
+                            ${dateText}
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="detail-label">
+                            PROBLEMS
+                        </span>
+
+                        <span class="detail-value">
+                            ${test.problem_count || 0}
+                            DETECTED
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="detail-label">
+                            RISK LEVEL
+                        </span>
+
+                        <span class="detail-value">
+                            ${escapeHtml(
+                                riskLevel
+                            )}
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="detail-label">
+                            TEST ID
+                        </span>
+
+                        <span class="detail-value">
+                            ${escapeHtml(
+                                shortId(
+                                    test.test_id
+                                )
+                            )}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-actions">
+
+                    <button
+                        class="view-btn"
+                        onclick="viewTest('${escapeAttribute(
+                            test.test_id
+                        )}')"
+                    >
+                        VIEW DETAILS
+                    </button>
+
+
+                    <button
+                        class="delete-btn"
+                        onclick="deleteTest('${escapeAttribute(
+                            test.test_id
+                        )}')"
+                    >
+                        DELETE TEST
+                    </button>
+
+                </div>
+
+            `;
+
+
+            return card;
+
+        }
+
+
+        // =====================================================
+        // VIEW TEST
+        // =====================================================
+
+        async function viewTest(
+            testId
+        ) {
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/api/history/${encodeURIComponent(
+                            testId
+                        )}`
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok || !data.success) {
+
+                    throw new Error(
+                        data.error ||
+                        "Unable to retrieve test."
+                    );
+
+                }
+
+
+                /*
+                 * Store the selected test using the
+                 * same result storage key used by
+                 * the existing result page.
+                 */
+
+                sessionStorage.setItem(
+                    "aquasafeResult",
+                    JSON.stringify(
+                        data.result
+                    )
+                );
+
+
+                window.location.href =
+                    "/result";
+
+
+            } catch (error) {
+
+                alert(
+                    "Unable to open this test.\n\n" +
+                    error.message
+                );
+
+            }
+
+        }
+
+
+        // =====================================================
+        // DELETE TEST
+        // =====================================================
+
+        async function deleteTest(
+            testId
+        ) {
+
+            const confirmed =
+                confirm(
+                    "Delete this water test from history?"
+                );
+
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/api/history/${encodeURIComponent(
+                            testId
+                        )}`,
+                        {
+                            method: "DELETE"
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok || !data.success) {
+
+                    throw new Error(
+                        data.error ||
+                        "Unable to delete test."
+                    );
+
+                }
+
+
+                loadHistory();
+
+
+            } catch (error) {
+
+                alert(
+                    "Unable to delete this test.\n\n" +
+                    error.message
+                );
+
+            }
+
+        }
+
+
+        // =====================================================
+        // DATE FORMAT
+        // =====================================================
+
+        function formatDate(
+            value
+        ) {
+
+            if (!value) {
+
+                return "UNKNOWN";
+
+            }
+
+
+            const date =
+                new Date(value);
+
+
+            if (
+                Number.isNaN(
+                    date.getTime()
+                )
+            ) {
+
+                return "UNKNOWN";
+
+            }
+
+
+            return date.toLocaleString(
+                "en-IN",
+                {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit"
+                }
+            );
+
+        }
+
+
+        // =====================================================
+        // SHORT TEST ID
+        // =====================================================
+
+        function shortId(
+            id
+        ) {
+
+            if (!id) {
+
+                return "UNKNOWN";
+
+            }
+
+
+            if (id.length <= 12) {
+
+                return id;
+
+            }
+
+
+            return (
+                id.substring(0, 6) +
+                "..." +
+                id.substring(id.length - 4)
+            );
+
+        }
+
+
+        // =====================================================
+        // HTML SAFETY
+        // =====================================================
+
+        function escapeHtml(
+            value
+        ) {
+
+            return String(
+                value ?? ""
+            )
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
+        }
+
+
+        function escapeAttribute(
+            value
+        ) {
+
+            return String(
+                value ?? ""
+            )
+                .replace(
+                    /\\/g,
+                    "\\\\"
+                )
+                .replace(
+                    /'/g,
+                    "\\'"
+                );
+
+        }
+
+
+        // =====================================================
+        // INITIAL LOAD
+        // =====================================================
+
+        loadHistory();
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,2184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AquaSafe AI — Analysis Result</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(circle at 50% 0%, rgba(0, 174, 255, 0.18), transparent 35%),
+                radial-gradient(circle at 0% 100%, rgba(0, 100, 255, 0.12), transparent 35%),
+                #020814;
+            color: #eaf8ff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(0, 174, 255, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 174, 255, 0.035) 1px, transparent 1px);
+            background-size: 45px 45px;
+            animation: gridMove 18s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes gridMove {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(45px);
+            }
+        }
+
+        /* ==========================================
+           HEADER
+        ========================================== */
+
+        header {
+            width: 100%;
+            padding: 22px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 200, 255, 0.18);
+            background: rgba(2, 12, 25, 0.65);
+            backdrop-filter: blur(18px);
+            position: relative;
+            z-index: 5;
+        }
+
+        .logo {
+            font-size: 23px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            color: #66ddff;
+            text-shadow: 0 0 15px rgba(0, 200, 255, 0.7);
+        }
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: auto;
+            margin-right: 35px;
+        }
+
+        .main-nav a {
+            padding: 9px 13px;
+            color: #8db8c9;
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            transition: 0.3s ease;
+        }
+
+        .main-nav a:hover,
+        .main-nav a.active {
+            color: #ffffff;
+            border-color: rgba(0, 200, 255, 0.3);
+            background: rgba(0, 180, 255, 0.08);
+            box-shadow: 0 0 18px rgba(0, 180, 255, 0.12);
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 12px;
+            color: #76e8ff;
+            letter-spacing: 1.5px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00e5ff;
+            box-shadow: 0 0 14px #00e5ff;
+            animation: pulse 1.6s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.4;
+                transform: scale(1.4);
+            }
+        }
+
+        /* ==========================================
+           MAIN
+        ========================================== */
+
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 35px auto 80px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ==========================================
+           TOP LEFT ACTION BUTTONS
+        ========================================== */
+
+        .actions {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .home-btn,
+        .primary-btn,
+        .secondary-btn {
+            padding: 13px 21px;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .home-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #a9eaff;
+            background: rgba(40, 160, 210, 0.08);
+            border: 1px solid rgba(80, 210, 255, 0.25);
+            text-decoration: none;
+        }
+
+        .home-btn:hover {
+            color: #ffffff;
+            background: rgba(50, 180, 230, 0.16);
+            border-color: rgba(80, 210, 255, 0.55);
+            transform: translateY(-2px);
+            box-shadow: 0 0 22px rgba(0, 200, 255, 0.2);
+        }
+
+        button {
+            border: none;
+            font-family: inherit;
+        }
+
+        .primary-btn {
+            color: #00131c;
+            background: #55dcff;
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.3);
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 210, 255, 0.5);
+        }
+
+        .secondary-btn {
+            color: #a9eaff;
+            background: rgba(40, 160, 210, 0.08);
+            border: 1px solid rgba(80, 210, 255, 0.25);
+        }
+
+        .secondary-btn:hover {
+            color: #ffffff;
+            background: rgba(50, 180, 230, 0.15);
+            border-color: rgba(80, 210, 255, 0.45);
+            transform: translateY(-2px);
+        }
+
+        /* ==========================================
+           PAGE TITLE
+        ========================================== */
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .page-title h1 {
+            font-size: clamp(32px, 5vw, 58px);
+            letter-spacing: 5px;
+            color: #dffaff;
+            text-shadow:
+                0 0 12px rgba(0, 200, 255, 0.65),
+                0 0 35px rgba(0, 100, 255, 0.3);
+        }
+
+        .page-title p {
+            margin-top: 12px;
+            color: #83a9bb;
+            letter-spacing: 2px;
+            font-size: 13px;
+        }
+
+        /* ==========================================
+           TOP DASHBOARD
+        ========================================== */
+
+        .dashboard-top {
+            display: grid;
+            grid-template-columns: 1fr 1.6fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .glass-card {
+            background: linear-gradient(
+                145deg,
+                rgba(9, 36, 58, 0.78),
+                rgba(3, 15, 30, 0.72)
+            );
+            border: 1px solid rgba(70, 211, 255, 0.24);
+            border-radius: 22px;
+            box-shadow:
+                0 20px 70px rgba(0, 0, 0, 0.35),
+                inset 0 0 40px rgba(0, 170, 255, 0.025);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                #48dfff,
+                transparent
+            );
+            opacity: 0.65;
+        }
+
+        /* ==========================================
+           SAFETY SCORE
+        ========================================== */
+
+        .score-card {
+            min-height: 340px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 35px;
+        }
+
+        .card-label {
+            font-size: 12px;
+            color: #7199aa;
+            letter-spacing: 3px;
+            margin-bottom: 25px;
+        }
+
+        .score-ring {
+            --score-degrees: 0deg;
+
+            width: 210px;
+            height: 210px;
+            min-width: 210px;
+            min-height: 210px;
+
+            flex: 0 0 210px;
+
+            border-radius: 50%;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            position: relative;
+
+            background:
+                radial-gradient(
+                    circle,
+                    #031421 0,
+                    #031421 67%,
+                    transparent 68%
+                );
+
+            box-shadow:
+                0 0 35px rgba(0, 200, 255, 0.12);
+        }
+
+        .score-ring::before {
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            width: 210px;
+            height: 210px;
+
+            border-radius: 50%;
+
+            background:
+                conic-gradient(
+                    #00d9ff 0deg,
+                    #00d9ff var(--score-degrees),
+                    rgba(40, 90, 115, 0.15) var(--score-degrees) 360deg
+                );
+
+            -webkit-mask:
+                radial-gradient(
+                    farthest-side,
+                    transparent calc(100% - 10px),
+                    #000 calc(100% - 9px)
+                );
+
+            mask:
+                radial-gradient(
+                    farthest-side,
+                    transparent calc(100% - 10px),
+                    #000 calc(100% - 9px)
+                );
+        }
+
+        .score-ring::after {
+            content: "";
+
+            position: absolute;
+
+            inset: 13px;
+
+            border-radius: 50%;
+
+            border: 1px solid rgba(0, 210, 255, 0.12);
+
+            pointer-events: none;
+        }
+
+        .score-value {
+            position: relative;
+            z-index: 2;
+
+            width: 155px;
+            height: 155px;
+
+            border-radius: 50%;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            background: #031421;
+        }
+
+        .score-number {
+            font-size: 62px;
+            font-weight: bold;
+            line-height: 1;
+            color: #e8fbff;
+            text-shadow: 0 0 22px rgba(0, 210, 255, 0.75);
+        }
+
+        .score-unit {
+            margin-top: 8px;
+            color: #6798aa;
+            font-size: 11px;
+            letter-spacing: 2px;
+        }
+
+        /* ==========================================
+           RISK CARD
+        ========================================== */
+
+        .risk-card {
+            min-height: 340px;
+            padding: 35px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .risk-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .risk-title {
+            font-size: 12px;
+            letter-spacing: 3px;
+            color: #7199aa;
+        }
+
+        .risk-pill {
+            padding: 9px 17px;
+            border-radius: 30px;
+            border: 1px solid rgba(0, 210, 255, 0.35);
+            color: #5ee6ff;
+            background: rgba(0, 170, 255, 0.08);
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+        }
+
+        .risk-main {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .risk-symbol {
+            width: 90px;
+            height: 90px;
+            min-width: 90px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 42px;
+            background: rgba(0, 160, 255, 0.08);
+            border: 1px solid rgba(80, 210, 255, 0.2);
+            box-shadow: 0 0 30px rgba(0, 190, 255, 0.12);
+        }
+
+        .risk-name {
+            font-size: 34px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #e9fbff;
+        }
+
+        .risk-description {
+            color: #7fabbc;
+            line-height: 1.7;
+            margin-top: 9px;
+            max-width: 650px;
+        }
+
+        .summary-line {
+            margin-top: 30px;
+            padding-top: 22px;
+            border-top: 1px solid rgba(100, 200, 255, 0.12);
+            display: flex;
+            gap: 45px;
+        }
+
+        .summary-item span {
+            display: block;
+        }
+
+        .summary-label {
+            color: #668b9c;
+            font-size: 10px;
+            letter-spacing: 2px;
+            margin-bottom: 7px;
+        }
+
+        .summary-number {
+            color: #dff9ff;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* ==========================================
+           SECTION TITLES
+        ========================================== */
+
+        .section-title {
+            margin: 50px 0 18px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title h2 {
+            font-size: 17px;
+            letter-spacing: 3px;
+            color: #bdefff;
+        }
+
+        .section-line {
+            height: 1px;
+            flex: 1;
+            background: linear-gradient(
+                90deg,
+                rgba(0, 200, 255, 0.35),
+                transparent
+            );
+        }
+
+        /* ==========================================
+           PARAMETERS
+        ========================================== */
+
+        .parameters-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .parameter-card {
+            padding: 20px;
+            border: 1px solid rgba(70, 210, 255, 0.14);
+            border-radius: 14px;
+            background: rgba(4, 22, 38, 0.65);
+            transition: 0.3s ease;
+        }
+
+        .parameter-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(70, 220, 255, 0.4);
+            box-shadow: 0 12px 35px rgba(0, 170, 255, 0.1);
+        }
+
+        .parameter-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .parameter-name {
+            color: #a8c8d7;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .parameter-status {
+            font-size: 8px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .parameter-value {
+            margin-top: 14px;
+            color: #eafaff;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .parameter-limit {
+            margin-top: 7px;
+            color: #5f8495;
+            font-size: 9px;
+        }
+
+        /* ==========================================
+           PROBLEMS
+        ========================================== */
+
+        .problem-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .problem-card {
+            display: grid;
+            grid-template-columns: 105px 1fr;
+            gap: 20px;
+            padding: 20px;
+            border: 1px solid rgba(255, 100, 80, 0.18);
+            border-radius: 14px;
+            background: rgba(40, 15, 15, 0.25);
+        }
+
+        .severity {
+            align-self: start;
+            text-align: center;
+            padding: 9px 6px;
+            border-radius: 8px;
+            background: rgba(255, 80, 70, 0.08);
+            color: #ff9a86;
+            font-size: 9px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .problem-name {
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .problem-text {
+            color: #91aebc;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .treatment {
+            margin-top: 9px;
+            color: #6fe2ff;
+            font-size: 10px;
+            line-height: 1.6;
+        }
+
+        /* ==========================================
+           SAFE MESSAGE
+        ========================================== */
+
+        .safe-message {
+            padding: 35px;
+            text-align: center;
+            border: 1px solid rgba(70, 240, 170, 0.2);
+            border-radius: 14px;
+            background: rgba(20, 90, 70, 0.08);
+        }
+
+        .safe-message-icon {
+            width: 50px;
+            height: 50px;
+            margin: auto;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #70edc0;
+            border: 1px solid rgba(70, 240, 170, 0.4);
+            box-shadow: 0 0 25px rgba(70, 240, 170, 0.15);
+            font-size: 25px;
+        }
+
+        .safe-message h3 {
+            margin-top: 15px;
+            font-size: 14px;
+            letter-spacing: 1.5px;
+        }
+
+        .safe-message p {
+            margin-top: 10px;
+            color: #769b9d;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        /* ==========================================
+           AQUA GUIDE
+        ========================================== */
+
+        .aqua-guide {
+            position: fixed;
+            right: 25px;
+            bottom: 15px;
+            z-index: 20;
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .guide-message {
+            width: 250px;
+            margin-bottom: 90px;
+            padding: 15px;
+            border: 1px solid rgba(0, 200, 255, 0.4);
+            border-radius: 14px;
+            background: rgba(2, 20, 35, 0.9);
+            backdrop-filter: blur(12px);
+            color: #d8f6ff;
+            font-size: 11px;
+            line-height: 1.6;
+            box-shadow: 0 0 25px rgba(0, 180, 255, 0.15);
+        }
+
+        .guide-label {
+            display: block;
+            margin-bottom: 7px;
+            color: #53dfff;
+            font-size: 8px;
+            letter-spacing: 2px;
+        }
+
+        .guide-character {
+            width: 250px;
+            height: auto;
+            filter: drop-shadow(0 0 30px rgba(0, 190, 255, 0.5));
+            animation: aquaFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes aquaFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        /* ==========================================
+           POPUP
+        ========================================== */
+
+        .popup-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 6, 15, 0.72);
+            backdrop-filter: blur(13px);
+        }
+
+        .popup-overlay.active {
+            display: flex;
+            animation: fadeIn 0.35s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .popup {
+            width: min(650px, 90%);
+            padding: 35px;
+            text-align: center;
+            border: 1px solid rgba(0, 210, 255, 0.35);
+            border-radius: 22px;
+            background: rgba(2, 20, 35, 0.97);
+            box-shadow: 0 0 60px rgba(0, 170, 255, 0.2);
+            animation: popupIn 0.35s ease;
+        }
+
+        @keyframes popupIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .popup-icon {
+            font-size: 38px;
+            margin-bottom: 12px;
+            color: #5fe7ff;
+        }
+
+        .popup h2 {
+            font-size: 20px;
+            letter-spacing: 2px;
+        }
+
+        .popup-guide {
+            width: 150px;
+            height: 170px;
+            object-fit: contain;
+            margin: 10px auto;
+            filter: drop-shadow(0 0 22px rgba(0, 190, 255, 0.5));
+        }
+
+        .popup p {
+            color: #8daebb;
+            font-size: 12px;
+            line-height: 1.7;
+            margin: 10px auto 22px;
+            max-width: 460px;
+        }
+
+        .popup-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* ==========================================
+           RESPONSIVE
+        ========================================== */
+
+        @media (max-width: 1000px) {
+
+            header {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .main-nav {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                margin: 0;
+            }
+
+            .dashboard-top {
+                grid-template-columns: 1fr;
+            }
+
+            .parameters-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 700px) {
+
+            header {
+                padding: 18px 20px;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            .system-status {
+                display: none;
+            }
+
+            .main-nav {
+                gap: 3px;
+            }
+
+            .main-nav a {
+                padding: 8px 8px;
+                font-size: 8px;
+                letter-spacing: 1px;
+            }
+
+            .container {
+                width: 92%;
+                margin-top: 25px;
+            }
+
+            .actions {
+                justify-content: flex-start;
+            }
+
+            .parameters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .risk-main {
+                align-items: flex-start;
+            }
+
+            .risk-name {
+                font-size: 25px;
+            }
+
+            .risk-symbol {
+                width: 70px;
+                height: 70px;
+                min-width: 70px;
+                font-size: 32px;
+            }
+
+            .aqua-guide {
+                right: 5px;
+                bottom: 5px;
+            }
+
+            .guide-message {
+                display: none;
+            }
+
+            .guide-character {
+                width: 190px;
+            }
+
+        }
+
+        @media (max-width: 520px) {
+
+            .actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .home-btn,
+            .primary-btn,
+            .secondary-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .score-ring {
+                width: 190px;
+                height: 190px;
+                min-width: 190px;
+                min-height: 190px;
+                flex-basis: 190px;
+            }
+
+            .score-ring::before {
+                width: 190px;
+                height: 190px;
+            }
+
+            .score-value {
+                width: 140px;
+                height: 140px;
+            }
+
+            .score-number {
+                font-size: 50px;
+            }
+
+            .problem-card {
+                grid-template-columns: 1fr;
+            }
+
+            .guide-character {
+                width: 160px;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="logo">
+        AQUASAFE AI
+    </div>
+
+
+    <nav class="main-nav">
+
+        <a href="/">
+            HOME
+        </a>
+
+        <a href="/analyze">
+            ANALYZE
+        </a>
+
+        <a href="/history">
+            HISTORY
+        </a>
+
+        <a href="/about">
+            ABOUT
+        </a>
+
+    </nav>
+
+
+    <div class="system-status">
+
+        <span class="status-dot"></span>
+
+        ANALYSIS COMPLETE
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+
+    <!-- ======================================================
+         TOP LEFT ACTIONS
+         ====================================================== -->
+
+    <div class="actions">
+
+        <a
+            href="/"
+            class="home-btn"
+        >
+            ← HOME
+        </a>
+
+
+        <button
+            class="primary-btn"
+            onclick="checkAgain()"
+        >
+            CHECK WATER AGAIN
+        </button>
+
+
+        <button
+            class="secondary-btn"
+            onclick="showDetailedResult()"
+        >
+            VIEW DETAILED RESULT
+        </button>
+
+    </div>
+
+
+    <!-- ======================================================
+         TITLE
+         ====================================================== -->
+
+    <div class="page-title">
+
+        <h1>
+            WATER INTELLIGENCE
+        </h1>
+
+        <p>
+            AI-POWERED WATER SAFETY ANALYSIS REPORT
+        </p>
+
+    </div>
+
+
+    <!-- ======================================================
+         TOP DASHBOARD
+         ====================================================== -->
+
+    <div class="dashboard-top">
+
+
+        <!-- SAFETY SCORE -->
+
+        <div class="glass-card score-card">
+
+            <div class="card-label">
+                AQUASAFE SCORE
+            </div>
+
+
+            <div
+                class="score-ring"
+                id="scoreRing"
+            >
+
+                <div class="score-value">
+
+                    <div
+                        class="score-number"
+                        id="scoreNumber"
+                    >
+                        --
+                    </div>
+
+
+                    <div class="score-unit">
+                        / 100
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RISK -->
+
+        <div class="glass-card risk-card">
+
+            <div class="risk-header">
+
+                <div class="risk-title">
+                    OVERALL WATER STATUS
+                </div>
+
+
+                <div
+                    class="risk-pill"
+                    id="riskPill"
+                >
+                    ANALYZING
+                </div>
+
+            </div>
+
+
+            <div class="risk-main">
+
+                <div
+                    class="risk-symbol"
+                    id="riskSymbol"
+                >
+                    ◉
+                </div>
+
+
+                <div>
+
+                    <div
+                        class="risk-name"
+                        id="riskName"
+                    >
+                        CHECKING...
+                    </div>
+
+
+                    <p
+                        class="risk-description"
+                        id="riskDescription"
+                    >
+                        Analyzing your water-quality data.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-line">
+
+                <div class="summary-item">
+
+                    <span class="summary-label">
+                        DETECTED CONCERNS
+                    </span>
+
+                    <span
+                        class="summary-number"
+                        id="problemCount"
+                    >
+                        0
+                    </span>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <span class="summary-label">
+                        ANALYSIS ENGINE
+                    </span>
+
+                    <span class="summary-number">
+                        AI
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         PARAMETERS
+         ====================================================== -->
+
+    <div class="section-title">
+
+        <h2>
+            ANALYZED PARAMETERS
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <div
+        class="parameters-grid"
+        id="parametersGrid"
+    >
+    </div>
+
+
+    <!-- ======================================================
+         DETECTED CONCERNS
+         ====================================================== -->
+
+    <div class="section-title">
+
+        <h2>
+            DETECTED CONCERNS
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <div
+        class="problem-list"
+        id="problemList"
+    >
+    </div>
+
+
+    <!-- ======================================================
+         AQUA GUIDE
+         ====================================================== -->
+
+    <div class="aqua-guide">
+
+        <div class="guide-message">
+
+            <span class="guide-label">
+                AQUA • AI GUIDE
+            </span>
+
+
+            <p id="guideMessage">
+                Your water analysis has been completed.
+                Review the detected parameters and
+                recommended treatment actions below.
+            </p>
+
+        </div>
+
+
+        <img
+            src="/static/images/guide-character.png"
+            class="guide-character"
+            alt="AquaSafe AI Guide"
+        >
+
+    </div>
+
+
+</main>
+
+
+<!-- ==========================================================
+     POPUP
+     ========================================================== -->
+
+<div
+    class="popup-overlay"
+    id="popupOverlay"
+>
+
+    <div class="popup">
+
+
+        <div
+            class="popup-icon"
+            id="popupIcon"
+        >
+            💧
+        </div>
+
+
+        <h2 id="popupTitle">
+            ANALYSIS COMPLETE
+        </h2>
+
+
+        <img
+            src="/static/images/guide-character.png"
+            class="popup-guide"
+            alt="AquaSafe AI Guide"
+        >
+
+
+        <p id="popupMessage">
+            Your water analysis has been completed.
+        </p>
+
+
+        <div class="popup-actions">
+
+
+            <button
+                class="primary-btn"
+                onclick="showDetailedResult()"
+            >
+                VIEW RESULT
+            </button>
+
+
+            <button
+                class="secondary-btn"
+                onclick="checkAgain()"
+            >
+                CHECK AGAIN
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+    // =====================================================
+    // GET RESULT
+    // =====================================================
+
+    const storedResult =
+        sessionStorage.getItem(
+            "aquasafeResult"
+        );
+
+
+    let result = null;
+
+
+    if (!storedResult) {
+
+        window.location.href =
+            "/analyze";
+
+    }
+
+    else {
+
+        try {
+
+            result =
+                JSON.parse(
+                    storedResult
+                );
+
+
+            displayResult();
+
+
+            setTimeout(
+                () => {
+                    showPopup();
+                },
+                700
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Result loading error:",
+                error
+            );
+
+
+            window.location.href =
+                "/analyze";
+
+        }
+
+    }
+
+
+    // =====================================================
+    // DISPLAY RESULT
+    // =====================================================
+
+    function displayResult() {
+
+        if (!result) {
+            return;
+        }
+
+
+        displayScore();
+
+        displayRisk();
+
+        displayParameters();
+
+        displayProblems();
+
+        updateGuide();
+
+    }
+
+
+    // =====================================================
+    // SAFETY SCORE
+    // =====================================================
+
+    function displayScore() {
+
+        const score =
+            Number(
+                result.safety_score
+            ) || 0;
+
+
+        const scoreNumber =
+            document.getElementById(
+                "scoreNumber"
+            );
+
+
+        const scoreRing =
+            document.getElementById(
+                "scoreRing"
+            );
+
+
+        let current = 0;
+
+
+        const interval =
+            setInterval(
+                () => {
+
+                    current += 2;
+
+
+                    if (current >= score) {
+
+                        current = score;
+
+                        clearInterval(
+                            interval
+                        );
+
+                    }
+
+
+                    scoreNumber.textContent =
+                        current;
+
+                },
+                15
+            );
+
+
+        const degrees =
+            Math.max(
+                0,
+                Math.min(
+                    100,
+                    score
+                )
+            ) * 3.6;
+
+
+        scoreRing.style.setProperty(
+            "--score-degrees",
+            degrees + "deg"
+        );
+
+    }
+
+
+    // =====================================================
+    // RISK
+    // =====================================================
+
+    function displayRisk() {
+
+        const risk =
+            result.risk || {};
+
+
+        const level =
+            (
+                risk.level || ""
+            ).toUpperCase();
+
+
+        const pill =
+            document.getElementById(
+                "riskPill"
+            );
+
+
+        const symbol =
+            document.getElementById(
+                "riskSymbol"
+            );
+
+
+        const name =
+            document.getElementById(
+                "riskName"
+            );
+
+
+        const description =
+            document.getElementById(
+                "riskDescription"
+            );
+
+
+        const problemCount =
+            document.getElementById(
+                "problemCount"
+            );
+
+
+        pill.textContent =
+            level || "UNKNOWN";
+
+
+        name.textContent =
+            risk.title ||
+            level ||
+            "UNKNOWN";
+
+
+        symbol.textContent =
+            risk.symbol ||
+            "◉";
+
+
+        problemCount.textContent =
+            result.problem_count || 0;
+
+
+        if (
+            level.includes("HIGH") ||
+            level.includes("RED")
+        ) {
+
+            pill.textContent =
+                "HIGH RISK";
+
+
+            pill.style.color =
+                "#ff927d";
+
+
+            pill.style.borderColor =
+                "rgba(255, 100, 80, 0.4)";
+
+
+            pill.style.background =
+                "rgba(255, 70, 60, 0.08)";
+
+
+            description.textContent =
+                "Significant water-quality concerns were detected. " +
+                "The affected parameters should be treated and " +
+                "the water should be re-tested before direct consumption.";
+
+        }
+
+        else if (
+            level.includes("CAUTION") ||
+            level.includes("YELLOW")
+        ) {
+
+            pill.textContent =
+                "CAUTION";
+
+
+            pill.style.color =
+                "#ffd77b";
+
+
+            pill.style.borderColor =
+                "rgba(255, 200, 80, 0.4)";
+
+
+            pill.style.background =
+                "rgba(255, 190, 60, 0.08)";
+
+
+            description.textContent =
+                "Some water-quality parameters require attention. " +
+                "Corrective treatment and re-testing may be required.";
+
+        }
+
+        else {
+
+            pill.textContent =
+                "LOW RISK";
+
+
+            pill.style.color =
+                "#75f4c0";
+
+
+            pill.style.borderColor =
+                "rgba(70, 240, 170, 0.35)";
+
+
+            pill.style.background =
+                "rgba(60, 230, 160, 0.07)";
+
+
+            description.textContent =
+                "No major parameter concerns were detected by " +
+                "the AquaSafe AI analysis engine.";
+
+        }
+
+    }
+
+
+    // =====================================================
+    // PARAMETERS
+    // =====================================================
+
+    function displayParameters() {
+
+        const grid =
+            document.getElementById(
+                "parametersGrid"
+            );
+
+
+        grid.innerHTML = "";
+
+
+        const water =
+            result.water || {};
+
+
+        const parameters = [
+
+            {
+                name: "pH",
+                key: "pH",
+                limit: "Safe range: 6.5 – 8.5"
+            },
+
+            {
+                name: "Hardness",
+                key: "Hardness",
+                limit: "Maximum: 300"
+            },
+
+            {
+                name: "Solids",
+                key: "Solids",
+                limit: "Maximum: 1000"
+            },
+
+            {
+                name: "Chloramines",
+                key: "Chloramines",
+                limit: "Maximum: 4"
+            },
+
+            {
+                name: "Sulfate",
+                key: "Sulfate",
+                limit: "Maximum: 250"
+            },
+
+            {
+                name: "Conductivity",
+                key: "Conductivity",
+                limit: "Maximum: 1000"
+            },
+
+            {
+                name: "Organic Carbon",
+                key: "Organic Carbon",
+                limit: "Maximum: 5"
+            },
+
+            {
+                name: "Trihalomethanes",
+                key: "Trihalomethanes",
+                limit: "Maximum: 100"
+            },
+
+            {
+                name: "Turbidity",
+                key: "Turbidity",
+                limit: "Maximum: 5"
+            }
+
+        ];
+
+
+        parameters.forEach(
+            parameter => {
+
+                const value =
+                    water[
+                        parameter.key
+                    ];
+
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.className =
+                    "parameter-card";
+
+
+                let safe = true;
+
+
+                if (
+                    parameter.key === "pH"
+                ) {
+
+                    safe =
+                        value >= 6.5 &&
+                        value <= 8.5;
+
+                }
+
+                else {
+
+                    const limits = {
+
+                        Hardness: 300,
+                        Solids: 1000,
+                        Chloramines: 4,
+                        Sulfate: 250,
+                        Conductivity: 1000,
+                        "Organic Carbon": 5,
+                        Trihalomethanes: 100,
+                        Turbidity: 5
+
+                    };
+
+
+                    safe =
+                        value <=
+                        limits[
+                            parameter.key
+                        ];
+
+                }
+
+
+                card.innerHTML = `
+
+                    <div class="parameter-top">
+
+                        <div class="parameter-name">
+                            ${parameter.name}
+                        </div>
+
+                        <div
+                            class="parameter-status"
+                            style="
+                                color:
+                                ${
+                                    safe
+                                    ? "#70edc0"
+                                    : "#ff9a86"
+                                };
+                            "
+                        >
+                            ${
+                                safe
+                                ? "NORMAL"
+                                : "ATTENTION"
+                            }
+                        </div>
+
+                    </div>
+
+
+                    <div class="parameter-value">
+                        ${value}
+                    </div>
+
+
+                    <div class="parameter-limit">
+                        ${parameter.limit}
+                    </div>
+
+                `;
+
+
+                grid.appendChild(
+                    card
+                );
+
+            }
+        );
+
+    }
+
+
+    // =====================================================
+    // PROBLEMS
+    // =====================================================
+
+    function displayProblems() {
+
+        const list =
+            document.getElementById(
+                "problemList"
+            );
+
+
+        list.innerHTML = "";
+
+
+        const problems =
+            result.problems || [];
+
+
+        if (
+            problems.length === 0
+        ) {
+
+            list.innerHTML = `
+
+                <div class="safe-message">
+
+                    <div class="safe-message-icon">
+                        ✓
+                    </div>
+
+
+                    <h3>
+                        NO MAJOR CONCERNS DETECTED
+                    </h3>
+
+
+                    <p>
+                        The analyzed water parameters are within
+                        the defined AquaSafe AI safety limits.
+                    </p>
+
+                </div>
+
+            `;
+
+
+            return;
+
+        }
+
+
+        problems.forEach(
+            problem => {
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.className =
+                    "problem-card";
+
+
+                const severity =
+                    problem.severity ||
+                    problem.level ||
+                    "Attention";
+
+
+                const parameter =
+                    problem.parameter ||
+                    "Water Parameter";
+
+
+                const issue =
+                    problem.issue ||
+                    "This parameter requires attention.";
+
+
+                const treatment =
+                    problem.treatment ||
+                    "Apply appropriate corrective treatment and re-test.";
+
+
+                card.innerHTML = `
+
+                    <div class="severity">
+                        ${severity}
+                    </div>
+
+
+                    <div>
+
+                        <div class="problem-name">
+                            ${parameter}
+                        </div>
+
+
+                        <div class="problem-text">
+                            ${issue}
+                        </div>
+
+
+                        <div class="treatment">
+                            Treatment:
+                            ${treatment}
+                        </div>
+
+                    </div>
+
+                `;
+
+
+                list.appendChild(
+                    card
+                );
+
+            }
+        );
+
+    }
+
+
+    // =====================================================
+    // AQUA GUIDE
+    // =====================================================
+
+    function updateGuide() {
+
+        const message =
+            document.getElementById(
+                "guideMessage"
+            );
+
+
+        const level =
+            (
+                result.risk?.level ||
+                ""
+            ).toUpperCase();
+
+
+        if (
+            level.includes("HIGH") ||
+            level.includes("RED")
+        ) {
+
+            message.textContent =
+                "I detected significant water-quality concerns. " +
+                "Review each affected parameter, follow the " +
+                "recommended treatment, and perform a fresh " +
+                "water test before considering direct consumption.";
+
+        }
+
+        else if (
+            level.includes("CAUTION") ||
+            level.includes("YELLOW")
+        ) {
+
+            message.textContent =
+                "Some parameters need attention. Review the " +
+                "recommended corrective actions and consider " +
+                "re-testing the water after treatment.";
+
+        }
+
+        else {
+
+            message.textContent =
+                "Excellent. The analyzed parameters are within " +
+                "the AquaSafe AI safety limits. Keep monitoring " +
+                "water quality regularly.";
+
+        }
+
+    }
+
+
+    // =====================================================
+    // POPUP
+    // =====================================================
+
+    function showPopup() {
+
+        const overlay =
+            document.getElementById(
+                "popupOverlay"
+            );
+
+
+        const icon =
+            document.getElementById(
+                "popupIcon"
+            );
+
+
+        const title =
+            document.getElementById(
+                "popupTitle"
+            );
+
+
+        const message =
+            document.getElementById(
+                "popupMessage"
+            );
+
+
+        const level =
+            (
+                result.risk?.level ||
+                ""
+            ).toUpperCase();
+
+
+        if (
+            level.includes("HIGH") ||
+            level.includes("RED")
+        ) {
+
+            icon.textContent =
+                "⚠";
+
+
+            title.textContent =
+                "HIGH RISK DETECTED";
+
+
+            message.textContent =
+                "AquaSafe AI detected significant concerns " +
+                "in the analyzed water. Would you like to " +
+                "review the detailed result or check the water again?";
+
+        }
+
+        else if (
+            level.includes("CAUTION") ||
+            level.includes("YELLOW")
+        ) {
+
+            icon.textContent =
+                "◈";
+
+
+            title.textContent =
+                "CAUTION DETECTED";
+
+
+            message.textContent =
+                "Some parameters require attention. " +
+                "You can review the detailed analysis or " +
+                "perform another water test.";
+
+        }
+
+        else {
+
+            icon.textContent =
+                "✓";
+
+
+            title.textContent =
+                "ANALYSIS COMPLETE";
+
+
+            message.textContent =
+                "Great news. No major concerns were detected " +
+                "in this water analysis. You can review the " +
+                "complete result below.";
+
+        }
+
+
+        overlay.classList.add(
+            "active"
+        );
+
+    }
+
+
+    // =====================================================
+    // VIEW RESULT
+    // =====================================================
+
+    function showDetailedResult() {
+
+        const overlay =
+            document.getElementById(
+                "popupOverlay"
+            );
+
+
+        overlay.classList.remove(
+            "active"
+        );
+
+
+        window.scrollTo({
+
+            top: 0,
+
+            behavior: "smooth"
+
+        });
+
+    }
+
+
+    // =====================================================
+    // CHECK AGAIN
+    // =====================================================
+
+    function checkAgain() {
+
+        sessionStorage.removeItem(
+            "aquasafeResult"
+        );
+
+
+        window.location.href =
+            "/analyze";
+
+    }
+
+
+    // =====================================================
+    // CLOSE POPUP
+    // =====================================================
+
+    document
+        .getElementById(
+            "popupOverlay"
+        )
+        .addEventListener(
+            "click",
+            function(event) {
+
+                if (
+                    event.target === this
+                ) {
+
+                    this.classList.remove(
+                        "active"
+                    );
+
+                }
+
+            }
+        );
+
+</script>
+
+</body>
+</html>

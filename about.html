@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AquaSafe AI | Meet Aqua</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(circle at 50% 20%, rgba(0, 180, 255, 0.14), transparent 35%),
+                linear-gradient(180deg, #020914 0%, #031525 45%, #020812 100%);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 170, 255, 0.045) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 170, 255, 0.045) 1px, transparent 1px);
+            background-size: 55px 55px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 55px;
+            background: rgba(2, 12, 25, 0.72);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(0, 191, 255, 0.2);
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: 800;
+            letter-spacing: 4px;
+            color: #ffffff;
+        }
+
+        .logo span {
+            color: #20cfff;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: #8fe9ff;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00e5ff;
+            box-shadow: 0 0 14px #00e5ff;
+        }
+
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 110px 7% 70px;
+            z-index: 1;
+        }
+
+        .hero-content {
+            width: 48%;
+            z-index: 5;
+        }
+
+        .eyebrow {
+            color: #22d5ff;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(45px, 6vw, 82px);
+            line-height: 0.95;
+            letter-spacing: -3px;
+            margin-bottom: 28px;
+        }
+
+        .hero h1 span {
+            color: #24d8ff;
+            text-shadow: 0 0 30px rgba(0, 205, 255, 0.5);
+        }
+
+        .hero-text {
+            max-width: 570px;
+            color: #9bb7c8;
+            font-size: 17px;
+            line-height: 1.8;
+            margin-bottom: 35px;
+        }
+
+        .start-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 27px;
+            border: 1px solid #20cfff;
+            border-radius: 5px;
+            color: white;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            background: rgba(0, 190, 255, 0.08);
+            box-shadow: 0 0 25px rgba(0, 200, 255, 0.13);
+            transition: 0.3s;
+        }
+
+        .start-btn:hover {
+            background: rgba(0, 200, 255, 0.2);
+            box-shadow: 0 0 35px rgba(0, 200, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .character-zone {
+            position: absolute;
+            right: 3%;
+            top: 90px;
+            width: 52%;
+            height: calc(100vh - 110px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .character-glow {
+            position: absolute;
+            width: 430px;
+            height: 430px;
+            border-radius: 50%;
+            background: rgba(0, 200, 255, 0.15);
+            filter: blur(75px);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(0.92);
+                opacity: 0.65;
+            }
+
+            50% {
+                transform: scale(1.08);
+                opacity: 1;
+            }
+        }
+
+        .character {
+            position: relative;
+            width: min(650px, 100%);
+            max-height: 780px;
+            object-fit: contain;
+            filter:
+                drop-shadow(0 0 25px rgba(0, 195, 255, 0.35))
+                drop-shadow(0 0 70px rgba(0, 150, 255, 0.18));
+            animation: float 5s ease-in-out infinite;
+            z-index: 3;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-13px);
+            }
+        }
+
+        .scan-line {
+            position: absolute;
+            width: 430px;
+            height: 1px;
+            background: #20d8ff;
+            box-shadow: 0 0 15px #20d8ff;
+            opacity: 0.5;
+            animation: scan 4s linear infinite;
+            z-index: 4;
+        }
+
+        @keyframes scan {
+            0% {
+                top: 20%;
+            }
+
+            100% {
+                top: 80%;
+            }
+        }
+
+        .floating-card {
+            position: absolute;
+            padding: 15px 18px;
+            background: rgba(3, 19, 34, 0.82);
+            border: 1px solid rgba(0, 210, 255, 0.38);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 25px rgba(0, 160, 255, 0.12);
+            border-radius: 7px;
+            z-index: 8;
+        }
+
+        .floating-card small {
+            display: block;
+            color: #5ddfff;
+            font-size: 9px;
+            letter-spacing: 2px;
+            margin-bottom: 7px;
+        }
+
+        .floating-card strong {
+            font-size: 13px;
+        }
+
+        .card-one {
+            top: 20%;
+            right: 3%;
+        }
+
+        .card-two {
+            bottom: 18%;
+            left: 5%;
+        }
+
+        .section {
+            position: relative;
+            z-index: 2;
+            padding: 110px 7%;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 65px;
+        }
+
+        .section-heading .eyebrow {
+            margin-bottom: 13px;
+        }
+
+        .section-heading h2 {
+            font-size: clamp(30px, 4vw, 52px);
+            letter-spacing: -1px;
+        }
+
+        .section-heading p {
+            max-width: 650px;
+            margin: 18px auto 0;
+            color: #7894a7;
+            line-height: 1.7;
+        }
+
+        .workflow {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            max-width: 1250px;
+            margin: auto;
+        }
+
+        .workflow-card {
+            position: relative;
+            min-height: 230px;
+            padding: 28px 22px;
+            background: rgba(5, 25, 43, 0.65);
+            border: 1px solid rgba(0, 183, 255, 0.18);
+            border-radius: 9px;
+            overflow: hidden;
+            transition: 0.35s;
+        }
+
+        .workflow-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0, 210, 255, 0.65);
+            box-shadow: 0 0 35px rgba(0, 190, 255, 0.12);
+        }
+
+        .workflow-number {
+            font-size: 12px;
+            letter-spacing: 3px;
+            color: #27d6ff;
+        }
+
+        .workflow-icon {
+            font-size: 35px;
+            margin: 25px 0 18px;
+        }
+
+        .workflow-card h3 {
+            font-size: 17px;
+            margin-bottom: 12px;
+        }
+
+        .workflow-card p {
+            color: #7895a8;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .parameters {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .parameter-card {
+            padding: 25px;
+            background: rgba(4, 22, 39, 0.7);
+            border: 1px solid rgba(0, 180, 255, 0.16);
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .parameter-card:hover {
+            border-color: rgba(0, 210, 255, 0.5);
+            transform: translateY(-4px);
+        }
+
+        .parameter-number {
+            color: #1fd3ff;
+            font-size: 10px;
+            letter-spacing: 2px;
+        }
+
+        .parameter-card h3 {
+            margin: 14px 0 8px;
+            font-size: 17px;
+        }
+
+        .parameter-card p {
+            color: #7895a8;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .risk-system {
+            max-width: 1000px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .risk-card {
+            padding: 35px 25px;
+            text-align: center;
+            background: rgba(4, 22, 39, 0.7);
+            border: 1px solid rgba(0, 180, 255, 0.18);
+            border-radius: 9px;
+        }
+
+        .risk-symbol {
+            font-size: 35px;
+            margin-bottom: 18px;
+        }
+
+        .risk-card h3 {
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .risk-card p {
+            color: #7895a8;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .guide-section {
+            max-width: 1100px;
+            margin: auto;
+            min-height: 450px;
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            padding: 45px;
+            background: rgba(4, 23, 40, 0.72);
+            border: 1px solid rgba(0, 190, 255, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .guide-image {
+            width: 45%;
+            max-height: 470px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 35px rgba(0, 195, 255, 0.3));
+        }
+
+        .guide-content {
+            flex: 1;
+        }
+
+        .guide-content h2 {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .guide-content h2 span {
+            color: #25d6ff;
+        }
+
+        .guide-content p {
+            color: #8ba6b7;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .guide-list {
+            list-style: none;
+        }
+
+        .guide-list li {
+            margin: 13px 0;
+            color: #c5d9e3;
+            font-size: 14px;
+        }
+
+        .guide-list li::before {
+            content: "◆";
+            color: #1fd3ff;
+            margin-right: 12px;
+            font-size: 9px;
+        }
+
+        .note {
+            max-width: 900px;
+            margin: 60px auto 0;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid rgba(0, 180, 255, 0.16);
+            background: rgba(3, 19, 33, 0.6);
+            border-radius: 8px;
+        }
+
+        .note strong {
+            color: #25d6ff;
+            font-size: 12px;
+            letter-spacing: 2px;
+        }
+
+        .note p {
+            margin-top: 12px;
+            color: #718d9f;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        footer {
+            position: relative;
+            z-index: 2;
+            padding: 35px;
+            text-align: center;
+            border-top: 1px solid rgba(0, 190, 255, 0.12);
+            color: #526f81;
+            font-size: 11px;
+            letter-spacing: 2px;
+        }
+
+        @media (max-width: 950px) {
+            .top-bar {
+                padding: 0 25px;
+            }
+
+            .hero {
+                padding-top: 110px;
+                flex-direction: column;
+            }
+
+            .hero-content {
+                width: 100%;
+                text-align: center;
+            }
+
+            .hero-text {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .character-zone {
+                position: relative;
+                right: auto;
+                top: auto;
+                width: 100%;
+                height: 600px;
+            }
+
+            .workflow {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .parameters {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .guide-section {
+                flex-direction: column;
+            }
+
+            .guide-image {
+                width: 70%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 {
+                font-size: 48px;
+            }
+
+            .character-zone {
+                height: 470px;
+            }
+
+            .workflow,
+            .parameters,
+            .risk-system {
+                grid-template-columns: 1fr;
+            }
+
+            .floating-card {
+                display: none;
+            }
+
+            .guide-image {
+                width: 100%;
+            }
+
+            .guide-section {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="top-bar">
+        <div class="logo">
+            AQUA<span>SAFE</span> AI
+        </div>
+
+        <div class="status">
+            <span class="status-dot"></span>
+            AQUA SYSTEM ONLINE
+        </div>
+    </header>
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="eyebrow">
+                AI WATER SAFETY INTELLIGENCE
+            </div>
+
+            <h1>
+                MEET<br>
+                <span>AQUA.</span>
+            </h1>
+
+            <p class="hero-text">
+                Your intelligent guide to understanding water quality.
+                AquaSafe AI analyzes important water parameters, detects
+                potential concerns and provides intelligent treatment
+                recommendations.
+            </p>
+
+            <a href="/analyze" class="start-btn">
+                START WATER TEST
+                <span>→</span>
+            </a>
+
+        </div>
+
+
+        <div class="character-zone">
+
+            <div class="character-glow"></div>
+
+            <div class="scan-line"></div>
+
+            <img
+                src="/static/images/guide-character.png"
+                class="character"
+                alt="Aqua - AquaSafe AI Water Safety Guide"
+            >
+
+            <div class="floating-card card-one">
+                <small>AI STATUS</small>
+                <strong>WATER INTELLIGENCE ACTIVE</strong>
+            </div>
+
+            <div class="floating-card card-two">
+                <small>ANALYSIS ENGINE</small>
+                <strong>9 PARAMETERS MONITORED</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- HOW IT WORKS -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div class="eyebrow">
+                AQUASAFE AI PROCESS
+            </div>
+
+            <h2>HOW AQUA WORKS</h2>
+
+            <p>
+                AquaSafe AI transforms water measurements into an
+                understandable safety assessment through a simple
+                intelligent workflow.
+            </p>
+
+        </div>
+
+
+        <div class="workflow">
+
+            <div class="workflow-card">
+                <div class="workflow-number">01 / INPUT</div>
+                <div class="workflow-icon">💧</div>
+                <h3>ENTER WATER DATA</h3>
+                <p>
+                    Provide measurements for the nine water-quality
+                    parameters.
+                </p>
+            </div>
+
+            <div class="workflow-card">
+                <div class="workflow-number">02 / ANALYZE</div>
+                <div class="workflow-icon">⚙</div>
+                <h3>AI ANALYSIS</h3>
+                <p>
+                    AquaSafe AI processes the measurements using its
+                    water-quality analysis logic.
+                </p>
+            </div>
+
+            <div class="workflow-card">
+                <div class="workflow-number">03 / DETECT</div>
+                <div class="workflow-icon">⌁</div>
+                <h3>DETECT CONCERNS</h3>
+                <p>
+                    Values outside the defined ranges are identified
+                    and classified by severity.
+                </p>
+            </div>
+
+            <div class="workflow-card">
+                <div class="workflow-number">04 / RECOMMEND</div>
+                <div class="workflow-icon">✦</div>
+                <h3>TREATMENT GUIDANCE</h3>
+                <p>
+                    Intelligent treatment recommendations are generated
+                    for detected parameters.
+                </p>
+            </div>
+
+            <div class="workflow-card">
+                <div class="workflow-number">05 / RE-TEST</div>
+                <div class="workflow-icon">↻</div>
+                <h3>MONITOR AGAIN</h3>
+                <p>
+                    After treatment, water can be tested again to
+                    monitor the parameters.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PARAMETERS -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div class="eyebrow">
+                WATER INTELLIGENCE
+            </div>
+
+            <h2>9 PARAMETERS. ONE ANALYSIS.</h2>
+
+            <p>
+                AquaSafe AI evaluates the following water-quality
+                measurements during analysis.
+            </p>
+
+        </div>
+
+
+        <div class="parameters">
+
+            <div class="parameter-card">
+                <div class="parameter-number">01</div>
+                <h3>pH</h3>
+                <p>Measures how acidic or alkaline the water is.</p>
+            </div>
+
+            <div class="parameter-card">
+                <div class="parameter-number">02</div>
+                <h3>Hardness</h3>
+                <p>Indicates the concentration of hardness-causing minerals.</p>
+            </div>
+
+            <div class="parameter-card">
+                <div class="parameter-number">03</div>
+                <h3>Total Solids</h3>
+                <p>Represents dissolved and suspended solids in the water.</p>
+            </div>
+
+            <div class="parameter-card">
+                <div class="parameter-number">04</div>
+                <h3>Chloramines</h3>
+                <p>Tracks chloramine concentration in the tested water.</p>
+            </div>
+
+            <div class="parameter-card">
+                <div class="parameter-number">05</div>
+                <h3>Sulfate</h3>
+                <p>Measures sulfate concentration.</p>
+            </div>
+
+            <div class="parameter-card">
+                <div class="parameter-number">06</div>
+                <h3>Conductivity</h3>
+                <p>Provides an indication of dissolved ionic material.</p>
+            </div>
+
+            <div class="parameter-card">
+                <div class="parameter-number">07</div>
+                <h3>Organic Carbon</h3>
+                <p>Measures the amount of organic carbon present.</p>
+            </div>
+
+            <div class="parameter-card">
+                <div class="parameter-number">08</div>
+                <h3>Trihalomethanes</h3>
+                <p>Tracks trihalomethane concentration.</p>
+            </div>
+
+            <div class="parameter-card">
+                <div class="parameter-number">09</div>
+                <h3>Turbidity</h3>
+                <p>Indicates the cloudiness caused by suspended particles.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- RISK -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div class="eyebrow">
+                RISK INTELLIGENCE
+            </div>
+
+            <h2>UNDERSTAND THE SIGNAL</h2>
+
+            <p>
+                AquaSafe AI converts detected parameter problems into
+                an easy-to-understand overall risk classification.
+            </p>
+
+        </div>
+
+
+        <div class="risk-system">
+
+            <div class="risk-card">
+                <div class="risk-symbol">🟢</div>
+                <h3>LOW RISK</h3>
+                <p>
+                    No parameters were detected outside the defined
+                    monitoring ranges.
+                </p>
+            </div>
+
+            <div class="risk-card">
+                <div class="risk-symbol">🟡</div>
+                <h3>CAUTION</h3>
+                <p>
+                    Moderate parameter concerns were detected and
+                    should be monitored.
+                </p>
+            </div>
+
+            <div class="risk-card">
+                <div class="risk-symbol">🔴</div>
+                <h3>HIGH RISK</h3>
+                <p>
+                    One or more high-severity parameter concerns
+                    were detected.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- AQUA -->
+
+    <section class="section">
+
+        <div class="guide-section">
+
+            <img
+                src="/static/images/guide-character.png"
+                class="guide-image"
+                alt="Aqua AI Guide"
+            >
+
+            <div class="guide-content">
+
+                <div class="eyebrow">
+                    YOUR WATER SAFETY GUIDE
+                </div>
+
+                <h2>
+                    I'M <span>AQUA.</span>
+                </h2>
+
+                <p>
+                    I'm here to make water-quality analysis easier to
+                    understand. I help turn complex measurements into
+                    clear information about detected concerns and
+                    possible treatment approaches.
+                </p>
+
+                <ul class="guide-list">
+                    <li>Analyze water-quality parameters</li>
+                    <li>Identify potential parameter concerns</li>
+                    <li>Classify overall analysis risk</li>
+                    <li>Calculate a safety score</li>
+                    <li>Provide intelligent treatment recommendations</li>
+                    <li>Encourage continued monitoring and re-testing</li>
+                </ul>
+
+            </div>
+
+        </div>
+
+
+        <div class="note">
+
+            <strong>IMPORTANT WATER SAFETY NOTE</strong>
+
+            <p>
+                AquaSafe AI is a water-quality analysis and decision-support
+                system. Its results should not be considered a substitute
+                for certified laboratory testing or professional water-safety
+                guidance when determining whether water is suitable for
+                drinking.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <footer>
+        AQUASAFE AI &nbsp; | &nbsp; INTELLIGENT WATER SAFETY
+    </footer>
+
+</body>
+</html>

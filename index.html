@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>AquaSafe AI</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: white;
+
+            background:
+                radial-gradient(
+                    circle at 50% 30%,
+                    #073b68 0%,
+                    #021526 40%,
+                    #01070d 100%
+                );
+
+            overflow: hidden;
+        }
+
+
+        /* ==========================================================
+           BACKGROUND
+           ========================================================== */
+
+        .background {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+        }
+
+
+        .glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.35;
+        }
+
+
+        .glow-one {
+            background: #008cff;
+            top: -150px;
+            left: -100px;
+        }
+
+
+        .glow-two {
+            background: #00d9ff;
+            right: -150px;
+            bottom: -150px;
+        }
+
+
+        .grid {
+            position: absolute;
+            inset: 0;
+
+            background-image:
+                linear-gradient(
+                    rgba(0, 174, 255, 0.08) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(0, 174, 255, 0.08) 1px,
+                    transparent 1px
+                );
+
+            background-size: 50px 50px;
+
+            transform:
+                perspective(600px)
+                rotateX(60deg)
+                scale(1.5);
+
+            transform-origin: bottom;
+
+            opacity: 0.4;
+        }
+
+
+        /* ==========================================================
+           HEADER
+           ========================================================== */
+
+        header {
+            position: relative;
+            z-index: 2;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 25px 55px;
+
+            flex-wrap: wrap;
+        }
+
+
+        /* ==========================================================
+           LOGO
+           ========================================================== */
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+
+        .logo-icon {
+            width: 52px;
+            height: 52px;
+
+            border: 1px solid #00c8ff;
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 25px;
+
+            box-shadow:
+                0 0 25px rgba(0, 200, 255, 0.6);
+        }
+
+
+        .logo h1 {
+            font-size: 22px;
+            letter-spacing: 4px;
+        }
+
+
+        .logo span {
+            display: block;
+
+            margin-top: 4px;
+
+            font-size: 9px;
+            letter-spacing: 2px;
+
+            color: #7fcde8;
+        }
+
+
+        /* ==========================================================
+           MAIN NAVIGATION
+           ========================================================== */
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+
+            gap: 8px;
+
+            margin-left: auto;
+            margin-right: 35px;
+        }
+
+
+        .main-nav a {
+            position: relative;
+
+            padding: 10px 15px;
+
+            border: 1px solid transparent;
+            border-radius: 8px;
+
+            color: #9bc5d7;
+
+            text-decoration: none;
+
+            font-size: 10px;
+            font-weight: 700;
+
+            letter-spacing: 1.8px;
+
+            transition: 0.3s ease;
+        }
+
+
+        .main-nav a:hover,
+        .main-nav a.active {
+
+            color: #ffffff;
+
+            border-color:
+                rgba(0, 200, 255, 0.35);
+
+            background:
+                rgba(0, 174, 255, 0.08);
+
+            text-shadow:
+                0 0 12px
+                rgba(0, 210, 255, 0.7);
+
+            box-shadow:
+                0 0 18px
+                rgba(0, 174, 255, 0.12);
+        }
+
+
+        .main-nav a.active::after {
+
+            content: "";
+
+            position: absolute;
+
+            left: 20%;
+            right: 20%;
+
+            bottom: -5px;
+
+            height: 2px;
+
+            background: #36dfff;
+
+            box-shadow:
+                0 0 10px #36dfff;
+
+            border-radius: 5px;
+        }
+
+
+        /* ==========================================================
+           SYSTEM STATUS
+           ========================================================== */
+
+        .status {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            color: #8eeaff;
+
+            font-size: 11px;
+
+            letter-spacing: 2px;
+        }
+
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: #00ffb3;
+
+            box-shadow:
+                0 0 15px #00ffb3;
+        }
+
+
+        /* ==========================================================
+           MAIN HERO
+           ========================================================== */
+
+        main {
+            position: relative;
+
+            z-index: 2;
+
+            min-height:
+                calc(100vh - 110px);
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+
+            padding: 40px;
+        }
+
+
+        .hero {
+            max-width: 850px;
+
+            animation:
+                appear 1.2s ease;
+        }
+
+
+        .tag {
+            color: #53dfff;
+
+            font-size: 12px;
+
+            letter-spacing: 5px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .hero h2 {
+            font-size:
+                clamp(45px, 7vw, 85px);
+
+            letter-spacing: 4px;
+
+            line-height: 1;
+
+            text-shadow:
+                0 0 35px
+                rgba(0, 174, 255, 0.5);
+        }
+
+
+        .hero h2 strong {
+            display: block;
+
+            color: #4fdcff;
+        }
+
+
+        .hero p {
+            max-width: 650px;
+
+            margin: 30px auto;
+
+            color: #a9c7d8;
+
+            line-height: 1.8;
+
+            font-size: 16px;
+        }
+
+
+        /* ==========================================================
+           START BUTTON
+           ========================================================== */
+
+        .start-button {
+
+            position: relative;
+
+            padding: 18px 40px;
+
+            border: 1px solid #00c8ff;
+
+            border-radius: 8px;
+
+            background:
+                rgba(0, 153, 255, 0.12);
+
+            color: white;
+
+            font-weight: bold;
+
+            letter-spacing: 3px;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+
+            box-shadow:
+
+                0 0 20px
+                rgba(0, 174, 255, 0.25),
+
+                inset 0 0 20px
+                rgba(0, 174, 255, 0.08);
+        }
+
+
+        .start-button:hover {
+
+            transform:
+                translateY(-4px);
+
+            background:
+                rgba(0, 174, 255, 0.25);
+
+            box-shadow:
+
+                0 0 35px
+                rgba(0, 200, 255, 0.6),
+
+                inset 0 0 25px
+                rgba(0, 200, 255, 0.12);
+        }
+
+
+        .hint {
+
+            margin-top: 18px;
+
+            color: #55798b;
+
+            font-size: 10px;
+
+            letter-spacing: 2px;
+        }
+
+
+        /* ==========================================================
+           FOOTER
+           ========================================================== */
+
+        footer {
+
+            position: absolute;
+
+            bottom: 20px;
+
+            left: 0;
+
+            width: 100%;
+
+            text-align: center;
+
+            color: #426879;
+
+            font-size: 9px;
+
+            letter-spacing: 3px;
+
+            z-index: 2;
+        }
+
+
+        /* ==========================================================
+           HERO ANIMATION
+           ========================================================== */
+
+        @keyframes appear {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(25px);
+            }
+
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+
+        /* ==========================================================
+           AQUA AI GUIDE
+           ========================================================== */
+
+        .aqua-guide {
+
+            position: fixed;
+
+            right: 35px;
+
+            bottom: 28px;
+
+            z-index: 20;
+
+            display: flex;
+
+            align-items: flex-end;
+
+            gap: 12px;
+
+            pointer-events: none;
+
+            animation:
+                aquaEnter 1.2s ease;
+        }
+
+
+        .aqua-character-wrap {
+
+            position: relative;
+
+            display: flex;
+
+            align-items: flex-end;
+
+            justify-content: center;
+        }
+
+
+        .aqua-character-wrap::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 230px;
+
+            height: 230px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(0, 190, 255, 0.18);
+
+            filter: blur(45px);
+
+            z-index: -1;
+
+            animation:
+                aquaPulse 3s ease-in-out infinite;
+        }
+
+
+        /* ==========================================================
+           AQUA CHARACTER
+           ========================================================== */
+
+        .aqua-character {
+
+            width: 400px;
+
+            max-width: none;
+
+            height: auto;
+
+            display: block;
+
+            animation:
+                aquaFloat 4s ease-in-out infinite;
+
+            filter:
+                drop-shadow(
+                    0 0 30px
+                    rgba(0, 180, 255, 0.5)
+                );
+        }
+
+
+        /* ==========================================================
+           AQUA SPEECH BUBBLE
+           ========================================================== */
+
+        .aqua-bubble {
+
+            width: 285px;
+
+            margin-bottom: 145px;
+
+            padding: 17px 19px;
+
+            border:
+                1px solid
+                rgba(0, 200, 255, 0.55);
+
+            border-radius: 15px;
+
+            background:
+                rgba(2, 21, 38, 0.88);
+
+            backdrop-filter:
+                blur(12px);
+
+            box-shadow:
+
+                0 0 25px
+                rgba(0, 174, 255, 0.2),
+
+                inset 0 0 20px
+                rgba(0, 174, 255, 0.05);
+
+            text-align: left;
+
+            position: relative;
+        }
+
+
+        .aqua-bubble::after {
+
+            content: "";
+
+            position: absolute;
+
+            right: -11px;
+
+            bottom: 38px;
+
+            width: 20px;
+
+            height: 20px;
+
+            background:
+                rgba(2, 21, 38, 0.88);
+
+            border-top:
+                1px solid
+                rgba(0, 200, 255, 0.55);
+
+            border-right:
+                1px solid
+                rgba(0, 200, 255, 0.55);
+
+            transform:
+                rotate(45deg);
+        }
+
+
+        .aqua-label {
+
+            display: block;
+
+            color: #53dfff;
+
+            font-size: 9px;
+
+            letter-spacing: 2px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .aqua-message {
+
+            color: #d8f6ff;
+
+            font-size: 13px;
+
+            line-height: 1.55;
+
+            transition:
+                opacity 0.18s ease;
+        }
+
+
+        .aqua-status {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            margin-top: 10px;
+
+            color: #6f9bad;
+
+            font-size: 8px;
+
+            letter-spacing: 1.5px;
+        }
+
+
+        .aqua-status-dot {
+
+            width: 6px;
+
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: #00ffb3;
+
+            box-shadow:
+                0 0 10px #00ffb3;
+        }
+
+
+        /* ==========================================================
+           AQUA ANIMATIONS
+           ========================================================== */
+
+        @keyframes aquaEnter {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(35px)
+                    scale(0.96);
+            }
+
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+        }
+
+
+        @keyframes aquaFloat {
+
+            0%,
+            100% {
+
+                transform:
+                    translateY(0);
+            }
+
+
+            50% {
+
+                transform:
+                    translateY(-10px);
+            }
+        }
+
+
+        @keyframes aquaPulse {
+
+            0%,
+            100% {
+
+                opacity: 0.55;
+
+                transform:
+                    scale(0.9);
+            }
+
+
+            50% {
+
+                opacity: 1;
+
+                transform:
+                    scale(1.08);
+            }
+        }
+
+
+        /* ==========================================================
+           RESPONSIVE
+           ========================================================== */
+
+        @media (max-width: 900px) {
+
+            header {
+
+                padding: 20px 25px;
+            }
+
+
+            .main-nav {
+
+                order: 3;
+
+                width: 100%;
+
+                justify-content: center;
+
+                margin: 12px 0 0;
+            }
+
+
+            main {
+
+                min-height:
+                    calc(100vh - 160px);
+            }
+
+
+            .aqua-guide {
+
+                right: 15px;
+
+                bottom: 18px;
+            }
+
+
+            .aqua-character {
+
+                width: 300px;
+            }
+
+
+            .aqua-bubble {
+
+                width: 245px;
+
+                margin-bottom: 105px;
+            }
+        }
+
+
+        @media (max-width: 700px) {
+
+            header {
+
+                padding: 20px;
+            }
+
+
+            .status {
+
+                display: none;
+            }
+
+
+            main {
+
+                padding: 20px;
+            }
+
+
+            .hero h2 {
+
+                font-size: 48px;
+            }
+
+
+            .main-nav {
+
+                gap: 3px;
+            }
+
+
+            .main-nav a {
+
+                padding: 8px 9px;
+
+                font-size: 8px;
+
+                letter-spacing: 1px;
+            }
+
+
+            .aqua-guide {
+
+                right: 10px;
+
+                bottom: 10px;
+            }
+
+
+            .aqua-character {
+
+                width: 220px;
+            }
+
+
+            .aqua-bubble {
+
+                width: 210px;
+
+                margin-bottom: 75px;
+
+                padding: 13px;
+            }
+
+
+            .aqua-message {
+
+                font-size: 11px;
+            }
+        }
+
+
+        @media (max-width: 520px) {
+
+            .main-nav a {
+
+                padding: 7px 6px;
+
+                font-size: 7px;
+            }
+
+
+            .aqua-bubble {
+
+                display: none;
+            }
+
+
+            .aqua-character {
+
+                width: 210px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ==========================================================
+         BACKGROUND
+         ========================================================== -->
+
+    <div class="background">
+
+        <div class="glow glow-one"></div>
+
+        <div class="glow glow-two"></div>
+
+        <div class="grid"></div>
+
+    </div>
+
+
+    <!-- ==========================================================
+         HEADER / NAVIGATION
+         ========================================================== -->
+
+    <header>
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                💧
+            </div>
+
+
+            <div>
+
+                <h1>
+                    AQUASAFE AI
+                </h1>
+
+
+                <span>
+                    SMART WATER SAFETY SYSTEM
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- MAIN NAVIGATION -->
+
+        <nav
+            class="main-nav"
+            aria-label="Main navigation"
+        >
+
+            <a
+                href="/"
+                class="active"
+            >
+                HOME
+            </a>
+
+
+            <a href="/analyze">
+                ANALYZE
+            </a>
+
+
+            <a href="/history">
+                HISTORY
+            </a>
+
+
+            <a href="/about">
+                ABOUT
+            </a>
+
+        </nav>
+
+
+        <!-- SYSTEM STATUS -->
+
+        <div class="status">
+
+            <span class="status-dot"></span>
+
+            SYSTEM ONLINE
+
+        </div>
+
+    </header>
+
+
+    <!-- ==========================================================
+         MAIN HERO
+         ========================================================== -->
+
+    <main>
+
+        <section class="hero">
+
+
+            <div class="tag">
+                AI-POWERED WATER ANALYSIS
+            </div>
+
+
+            <h2>
+
+                KNOW YOUR
+
+                <strong>
+                    WATER.
+                </strong>
+
+            </h2>
+
+
+            <p>
+
+                Analyze water-quality parameters, identify potential
+                concerns and receive intelligent treatment guidance
+                powered by AquaSafe AI.
+
+            </p>
+
+
+            <button
+                class="start-button"
+                onclick="startTest()"
+            >
+
+                START WATER TEST
+
+            </button>
+
+
+            <div class="hint">
+
+                9 PARAMETERS • SMART ANALYSIS • SAFETY ASSESSMENT
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+
+    <!-- ==========================================================
+         AQUA AI WEBSITE GUIDE
+         ========================================================== -->
+
+    <div
+        class="aqua-guide"
+        id="aquaGuide"
+    >
+
+
+        <!-- SPEECH BUBBLE -->
+
+        <div class="aqua-bubble">
+
+
+            <span class="aqua-label">
+
+                AQUA • AI GUIDE
+
+            </span>
+
+
+            <div
+                class="aqua-message"
+                id="aquaMessage"
+            >
+
+                Hello. I'm Aqua. I'll guide you through your
+                water safety analysis.
+
+            </div>
+
+
+            <div class="aqua-status">
+
+                <span class="aqua-status-dot"></span>
+
+                GUIDE ONLINE
+
+            </div>
+
+
+        </div>
+
+
+        <!-- AQUA CHARACTER -->
+
+        <div class="aqua-character-wrap">
+
+            <img
+                src="/static/images/guide-character.png"
+                class="aqua-character"
+                alt="Aqua AI Guide"
+            >
+
+        </div>
+
+
+    </div>
+
+
+    <!-- ==========================================================
+         FOOTER
+         ========================================================== -->
+
+    <footer>
+
+        AQUASAFE AI • SMART WATER SAFETY & TREATMENT ADVISOR
+
+    </footer>
+
+
+    <!-- ==========================================================
+         JAVASCRIPT
+         ========================================================== -->
+
+    <script>
+
+
+        /* ==========================================================
+           AQUA AI GUIDE MESSAGES
+           ========================================================== */
+
+        const aquaMessages = [
+
+            "Hello. I'm Aqua. I'll guide you through your water safety analysis.",
+
+            "You can enter your water measurements manually or use one of the sample profiles.",
+
+            "I'll send your measurements to the AquaSafe AI analysis system.",
+
+            "Your results will include a risk level, safety score, detected concerns and treatment guidance."
+
+        ];
+
+
+        let aquaMessageIndex = 0;
+
+
+        /* ==========================================================
+           SHOW AQUA MESSAGE
+           ========================================================== */
+
+        function showAquaMessage(message) {
+
+            const messageBox =
+                document.getElementById("aquaMessage");
+
+
+            if (!messageBox) {
+
+                return;
+            }
+
+
+            messageBox.style.opacity = "0";
+
+
+            setTimeout(() => {
+
+                messageBox.textContent = message;
+
+                messageBox.style.opacity = "1";
+
+            }, 180);
+
+        }
+
+
+        /* ==========================================================
+           ROTATE AQUA MESSAGE
+           ========================================================== */
+
+        function rotateAquaMessage() {
+
+            aquaMessageIndex =
+                (aquaMessageIndex + 1)
+                % aquaMessages.length;
+
+
+            showAquaMessage(
+                aquaMessages[aquaMessageIndex]
+            );
+
+        }
+
+
+        /* ==========================================================
+           AUTOMATIC AQUA MESSAGE ROTATION
+           ========================================================== */
+
+        setInterval(
+            rotateAquaMessage,
+            6500
+        );
+
+
+        /* ==========================================================
+           START WATER TEST
+           ========================================================== */
+
+        function startTest() {
+
+            showAquaMessage(
+
+                "Perfect. Let's begin your water analysis. I'll guide you on the next screen."
+
+            );
+
+
+            setTimeout(() => {
+
+                window.location.href =
+                    "/analyze";
+
+            }, 700);
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>
