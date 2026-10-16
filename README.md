@@ -52,10 +52,9 @@ python -m pip install -r requirements.txt
 ```
 
 ### 3. Run the application
+pip install -r requirements.txt
+python backend/app.py
 
-```bash
-python app.py
-```
 
 Follow the instructions displayed by the application. The exact startup steps may depend on how the project is configured.
 
